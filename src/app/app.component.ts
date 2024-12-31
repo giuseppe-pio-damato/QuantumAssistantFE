@@ -1,49 +1,43 @@
-import { Component } from '@angular/core';
-import { trigger, style, transition, animate } from '@angular/animations';
-import {NgForOf, NgIf} from '@angular/common';
+import {Component} from '@angular/core';
+import {FindPatternsService} from '../service/find-patterns.service';
 import {FormsModule} from '@angular/forms';
+import {CommonModule} from '@angular/common';
+
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  animations: [
-    trigger('fade', [
-      transition(':enter', [
-        style({opacity: 0, transform: 'translateY(10px)'}),
-        animate('500ms ease-out', style({opacity: 1, transform: 'translateY(0)'})),
-      ]),
-      transition(':leave', [
-        animate('500ms ease-in', style({opacity: 0, transform: 'translateY(10px)'})),
-      ]),
-    ]),
-  ],
+  providers: [FindPatternsService],
   imports: [
-    NgForOf,
-    NgIf,
-    FormsModule
+    FormsModule,
+    CommonModule,
   ],
   standalone: true
 })
 export class AppComponent {
-  title = 'QuantumAssistantFE';
-  showResults = false; // Determina se mostrare i risultati o il form
-  formData: any = {}; // Dati del form
-  results: string[] = []; // Risultati simulati
+  showResults: boolean = false;
+  results: string[] = [];
+  formData: any = {
+    nonFunctionalRequirement: '',
+    architectureFamily: 'CLASSIC_ARCHITECTURE', // Valore di default
+    numOfResults: 5, // Numero predefinito di risultati
+  };
 
-  // Simulazione della chiamata al backend
-  findPatterns() {
+  constructor(private findPatternsService: FindPatternsService) {
+  }
+
+  async findPatterns() {
     this.showResults = true;
-    this.results = [
-      'Pattern 1: Singleton - Ensures a single instance.',
-      'Pattern 2: Factory - Creates objects without specifying the exact class.',
-      'Pattern 3: Observer - Notifies changes to multiple subscribers.',
-    ];
+    try {
+      this.results = await this.findPatternsService.findPattern(this.formData);
+    } catch (error) {
+      console.error('Error finding patterns:', error);
+      this.results = ['Error fetching patterns. Please try again later.'];
+    }
   }
 
   reset() {
     this.showResults = false;
-    this.formData = {};
-    this.results = [];
   }
 }
