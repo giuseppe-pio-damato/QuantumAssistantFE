@@ -13,11 +13,11 @@
 import {Inject, Injectable, Optional} from '@angular/core';
 import {HttpClient, HttpEvent, HttpHeaders, HttpResponse} from '@angular/common/http';
 
-
 import {Observable} from 'rxjs';
+
+import {RequestInformationDTO} from '../model/requestInformationDTO';
 import {Configuration} from './configuration';
 import {BASE_PATH} from './variables';
-import {RequestInformationDTO} from '../model/requestInformationDTO';
 
 
 @Injectable({
@@ -61,9 +61,15 @@ export class SuggestPatternControllerImplService {
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public suggestPattern(body: RequestInformationDTO, observe?: 'body', reportProgress?: boolean): Observable<Array<string>>;
-  public suggestPattern(body: RequestInformationDTO, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<string>>>;
-  public suggestPattern(body: RequestInformationDTO, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<string>>>;
+  public suggestPattern(body: RequestInformationDTO, observe?: 'body', reportProgress?: boolean): Observable<{
+    [key: string]: string;
+  }>;
+  public suggestPattern(body: RequestInformationDTO, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<{
+    [key: string]: string;
+  }>>;
+  public suggestPattern(body: RequestInformationDTO, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<{
+    [key: string]: string;
+  }>>;
   public suggestPattern(body: RequestInformationDTO, observe: any = 'body', reportProgress: boolean = false): Observable<any> {
 
     if (body === null || body === undefined) {
@@ -90,7 +96,7 @@ export class SuggestPatternControllerImplService {
       headers = headers.set('Content-Type', httpContentTypeSelected);
     }
 
-    return this.httpClient.request<Array<string>>('post', `${this.basePath}/request-pattern`,
+    return this.httpClient.request<{ [key: string]: string; }>('post', `${this.basePath}/request-pattern`,
       {
         body: body,
         withCredentials: this.configuration.withCredentials,

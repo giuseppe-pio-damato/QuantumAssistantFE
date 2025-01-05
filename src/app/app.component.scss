@@ -60,6 +60,22 @@
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
+.menu-section-details {
+  flex: 1;
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 12px;
+  margin-right: 20px;
+  margin-left: 20px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.menu-section-details:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
 form {
   display: flex;
   flex-direction: column;
@@ -129,6 +145,7 @@ form button:active {
 }
 
 .chat-messages {
+  flex: 1;
   background-color: #f4f4f9;
   padding: 1rem;
   border-radius: 12px;
