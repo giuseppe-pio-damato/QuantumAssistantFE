@@ -10,10 +10,10 @@
     <div class="menu-section" *ngIf="!showResults" [@fade]>
       <form (ngSubmit)="findPatterns()">
         <label for="req">Non-Functional Requirement:</label>
-        <input id="req" name="req" [(ngModel)]="formData.req" placeholder="e.g., scalability" required>
+        <input id="req" name="req" [(ngModel)]="formData.nonFunctionalRequirement" placeholder="e.g., scalability" required>
 
         <label for="arch">Architecture Family:</label>
-        <select id="arch" name="arch" [(ngModel)]="formData.arch" required>
+        <select id="arch" name="arch" [(ngModel)]="formData.architectureFamily" required>
           <option value="classical">Classical</option>
           <option value="quantum">Quantum</option>
         </select>
@@ -23,7 +23,7 @@
           type="number"
           id="results"
           name="results"
-          [(ngModel)]="formData.results"
+          [(ngModel)]="formData.numOfResults"
           min="1"
           max="3"
           value="3"

@@ -1,9 +1,10 @@
 import { NgModule, ModuleWithProviders, SkipSelf, Optional } from '@angular/core';
 import { Configuration } from './configuration';
 import { HttpClient } from '@angular/common/http';
+import {SuggestPatternControllerImplService} from './suggestPatternControllerImpl.service';
 
 
-import { SuggestPatternControllerImplService } from './api/suggestPatternControllerImpl.service';
+
 
 @NgModule({
   imports:      [],
