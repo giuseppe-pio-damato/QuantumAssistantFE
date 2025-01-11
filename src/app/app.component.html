@@ -8,21 +8,35 @@
 
     <!-- Form Section -->
     <div *ngIf="!showResults" class="menu-section" [@flip]="!showResults ? 'form' : 'results'">
+
       <form (ngSubmit)="findPatterns()">
-        <label for="req">Non-Functional Requirement:</label>
-        <input
-          id="req"
-          name="req"
-          [(ngModel)]="formData.nonFunctionalRequirement"
-          placeholder="e.g., scalability"
-          required
-        />
+        <label for="nfr">Non-Functional Requirement:</label>
+        <select
+          id="nfr"
+          name="nfr"
+          [(ngModel)]="formData.nonFunctionalRequirement" required>
+          <option value="" disabled>Select a requirement</option>
+          <option *ngFor="let req of nonFunctionalRequirements" [value]="req.value">
+            {{ req.label }}
+          </option>
+        </select>
 
         <label for="arch">Architecture Family:</label>
         <select id="arch" name="arch" [(ngModel)]="formData.architectureFamily" required>
-          <option value="classical">Classical</option>
-          <option value="quantum">Quantum</option>
+          <option value="" disabled>Select an architecture family</option>
+          <option *ngFor="let arch of architectureFamilies" [value]="arch.value">
+            {{ arch.label }}
         </select>
+
+        <label for="rate">Non-Functional Requirement Rate:</label>
+        <input
+          type="number"
+          id="rate"
+          name="rate"
+          [(ngModel)]="formData.nonFunctionalRequirementRate"
+          min="1"
+          required
+        />
 
         <label for="results">Number of Results:</label>
         <input

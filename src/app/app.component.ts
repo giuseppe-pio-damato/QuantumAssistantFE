@@ -5,10 +5,13 @@ import { CommonModule } from '@angular/common';
 import { RequestInformationDTO } from '../service/model/requestInformationDTO';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {NgxPaginationModule} from 'ngx-pagination';
+import NonFunctionalRequirementEnum = RequestInformationDTO.NonFunctionalRequirementEnum;
+import ArchitectureFamilyEnum = RequestInformationDTO.ArchitectureFamilyEnum;
 
 interface FormData {
   nonFunctionalRequirement: string;
   architectureFamily: string;
+  nonFunctionalRequirementRate: number;
   numOfResults: number;
 }
 
@@ -54,21 +57,22 @@ export class AppComponent {
   formData: FormData = {
     nonFunctionalRequirement: '',
     architectureFamily: '',
+    nonFunctionalRequirementRate: 1,
     numOfResults: 1,
   };
 
-  constructor(private findPatternsService: FindPatternsService) {}
+  nonFunctionalRequirements = Object.entries(NonFunctionalRequirementEnum).map(([key, value]) => ({
+    value: value,
+    label: value.toLowerCase().replace(/_/g, ' '),
+  }));
 
-  get architectureFamilyEnum(): RequestInformationDTO.ArchitectureFamilyEnum {
-    switch (this.formData.architectureFamily) {
-      case 'classical':
-        return RequestInformationDTO.ArchitectureFamilyEnum.CLASSICARCHITECTURE;
-      case 'quantum':
-        return RequestInformationDTO.ArchitectureFamilyEnum.QUANTUMCOMPUTING;
-      default:
-        return RequestInformationDTO.ArchitectureFamilyEnum.CLASSICARCHITECTURE;
-    }
-  }
+  architectureFamilies = Object.entries(ArchitectureFamilyEnum).map(([key, value]) => ({
+    value: value,
+    label: value.toLowerCase().replace(/_/g, ' '),
+  }));
+
+
+  constructor(private findPatternsService: FindPatternsService) {}
 
   get objectKeys() {
     return Object.keys;
@@ -82,12 +86,7 @@ export class AppComponent {
     this.showResults = true;
     this.showBox = true;
     try {
-      const requestBody: RequestInformationDTO = {
-        ...this.formData,
-        architectureFamily: this.architectureFamilyEnum,
-      };
-
-      this.results = await this.findPatternsService.findPattern(requestBody);
+      this.results = await this.findPatternsService.findPattern(this.formData);
     } catch (error) {
       console.error('Error finding patterns:', error);
       this.results = { 'Error': 'Failed to fetch patterns. Please try again later.' };
@@ -100,6 +99,7 @@ export class AppComponent {
     this.formData = {
       nonFunctionalRequirement: '',
       architectureFamily: '',
+      nonFunctionalRequirementRate: 1,
       numOfResults: 1,
     };
     this.results = {};

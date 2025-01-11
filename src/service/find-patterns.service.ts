@@ -16,6 +16,7 @@ export class FindPatternsService {
   async findPattern(formData: {
     nonFunctionalRequirement: string;
     architectureFamily: string;
+    nonFunctionalRequirementRate: number;
     numOfResults: number;
   }): Promise<{ [key: string]: string }> {
     try {
@@ -40,11 +41,13 @@ export class FindPatternsService {
   private mapToRequestDTO(formData: {
     nonFunctionalRequirement: string;
     architectureFamily: string;
+    nonFunctionalRequirementRate: number;
     numOfResults: number;
   }): RequestInformationDTO {
     return <RequestInformationDTO>{
       nonFunctionalRequirement: formData.nonFunctionalRequirement,
       architectureFamily: formData.architectureFamily,
+      rateOfNonFunctionalRequirement: formData.nonFunctionalRequirementRate,
       numOfResults: formData.numOfResults,
     };
   }
