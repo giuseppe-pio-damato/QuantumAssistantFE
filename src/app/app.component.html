@@ -1,84 +1,116 @@
-<main class="main">
-  <div class="landing-page">
-    <!-- Logo Section -->
-    <div class="logo-section">
-      <h1>Quantum Assistant</h1>
-      <p>Your guide to design pattern selection.</p>
-    </div>
-
-    <!-- Form Section -->
-    <div *ngIf="!showResults" class="menu-section" [@flip]="!showResults ? 'form' : 'results'">
-
-      <form (ngSubmit)="findPatterns()">
-        <label for="nfr">Non-Functional Requirement:</label>
-        <select
-          id="nfr"
-          name="nfr"
-          [(ngModel)]="formData.nonFunctionalRequirement" required>
-          <option value="" disabled>Select a requirement</option>
-          <option *ngFor="let req of nonFunctionalRequirements" [value]="req.value">
-            {{ req.label }}
-          </option>
-        </select>
-
-        <label for="arch">Architecture Family:</label>
-        <select id="arch" name="arch" [(ngModel)]="formData.architectureFamily" required>
-          <option value="" disabled>Select an architecture family</option>
-          <option *ngFor="let arch of architectureFamilies" [value]="arch.value">
-            {{ arch.label }}
-        </select>
-
-        <label for="rate">Non-Functional Requirement Rate:</label>
-        <input
-          type="number"
-          id="rate"
-          name="rate"
-          [(ngModel)]="formData.nonFunctionalRequirementRate"
-          min="1"
-          required
-        />
-
-        <label for="results">Number of Results:</label>
-        <input
-          type="number"
-          id="results"
-          name="results"
-          [(ngModel)]="formData.numOfResults"
-          min="1"
-          max="3"
-          required
-        />
-
-        <button type="submit">Find Patterns</button>
-      </form>
-    </div>
-
-    <!-- Details Box -->
-    <div *ngIf="showBox" class="menu-section-details" [@fadeIn]>
-      <h2>Why?</h2>
-      <ul>
-        <li class="chat-messages"
-            *ngFor="let key of objectKeys(results) | paginate: { itemsPerPage: getSize, currentPage: p }">
-          <div>
-            <h1>{{ key }}:</h1>
-            <p>{{ results[key] }}</p>
-          </div>
-        </li>
-      </ul>
-      <pagination-controls (pageChange)="p = $event"></pagination-controls>
-      <button (click)="reset()">Back</button>
-    </div>
-
-    <!-- Results Section -->
-    <div *ngIf="showResults" class="menu-section" [@flip]="showResults ? 'results' : 'form'">
-      <h2>Results</h2>
-      <div>
-        <ul>
-          <li class="chat-messages" *ngFor="let key of objectKeys(results)">{{ key }}</li>
-        </ul>
+<div class="container-fluid">
+  <div class="row landing-page">
+    <!-- Title and Description Section -->
+    <div class="col-4">
+      <div *ngIf="!showDescription" class="logo-section" [@fadeIn]>
+        <h1>Quantum Assistant</h1>
+        <p>Your guide to design pattern selection.</p>
       </div>
-      <button (click)="reset()">Back</button>
+      <div *ngIf="showDescription" class="menu-section" [@fadeIn]>
+        <p>Quantum Assistant is your personal architectural pattern advisor. You can speed up your decision-making
+          process by analyzing specific needs,
+          such as non-functional requirements and their rate, and aligning them with well-defined architectural
+          families. This ensures that you adopt proven, efficient patterns,
+          reducing trial-and-error and accelerating development. Moreover, it gives you for each pattern suggested some
+          useful details about the choise that can leverage your know-how.</p>
+        <button class="btn btn-secondary" type="button" (click)="moreDetails()">Hide</button>
+      </div>
     </div>
 
+    <!-- Form and Result Section -->
+    <div class="col-8">
+      <!-- Form Section -->
+      <div *ngIf="!showHelp && !showResults" class="menu-section" [@fadeIn]="!showHelp ? 'form' : 'help'">
+        <form (ngSubmit)="findPatterns()">
+          <div class="form-group">
+            <label for="nfr">Non-Functional Requirement:</label>
+            <select
+              id="nfr"
+              name="nfr"
+              class="form-select"
+              [(ngModel)]="formData.nonFunctionalRequirement" required>
+              <option value="" disabled>Select a requirement</option>
+              <option *ngFor="let req of nonFunctionalRequirements" [value]="req.value">
+                {{ req.label }}
+              </option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="arch">Architecture Family:</label>
+            <select id="arch" name="arch" class="form-select" [(ngModel)]="formData.architectureFamily" required>
+              <option value="" disabled>Select an architecture family</option>
+              <option *ngFor="let arch of architectureFamilies" [value]="arch.value">
+                {{ arch.label }}
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="rate">Non-Functional Requirement Rate:</label>
+            <input
+              type="number"
+              id="rate"
+              name="rate"
+              [(ngModel)]="formData.nonFunctionalRequirementRate"
+              min="1"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="results">Number of Results:</label>
+            <input
+              type="number"
+              id="results"
+              name="results"
+              [(ngModel)]="formData.numOfResults"
+              min="1"
+              max="3"
+              required
+            />
+          </div>
+          <div class="button-group">
+            <button type="submit">Find Patterns</button>
+            <button type="button" (click)="toggleHelp()">Help</button>
+            <button type="button" (click)="moreDetails()">More Details</button>
+          </div>
+        </form>
+      </div>
+      <div class="row container-fluid">
+        <!-- Details Box -->
+        <div *ngIf="showResults" class="col-9 menu-section-details" [@fadeIn]>
+          <h2>Why?</h2>
+          <ul>
+            <li class="chat-messages"
+                *ngFor="let key of objectKeys(results) | paginate: { itemsPerPage: getSize, currentPage: p }">
+              <div>
+                <h1>{{ key }}:</h1>
+                <p>{{ results[key] }}</p>
+              </div>
+            </li>
+          </ul>
+          <pagination-controls (pageChange)="p = $event"></pagination-controls>
+          <button (click)="reset()">Back</button>
+        </div>
+        <!-- Results Section -->
+        <div *ngIf="showResults" class="col-3 menu-section" [@fadeIn]="showResults ? 'results' : 'form'">
+          <h2>Results</h2>
+          <div>
+            <ul>
+              <li class="chat-messages" *ngFor="let key of objectKeys(results)">{{ key }}</li>
+            </ul>
+          </div>
+          <button (click)="reset()">Back</button>
+        </div>
+      </div>
+      <!-- Help Section -->
+      <div *ngIf="showHelp" class="menu-section" [@fadeIn]="showHelp ? 'help' : 'form'">
+        <h2>Help</h2>
+        <p>In the <b>Non-Functional Requirement</b> dropdown list, you can select the primary goal that your system
+          needs to achieve. Then, you can choose the <b>Rate</b> of importance or priority for this requirement and
+          select the appropriate <b>Architecture Family</b> that best aligns with your system's objectives. After
+          specifying these details, you can chose how many <b>Results</b> you want and finally the system will provide
+          tailored architectural pattern recommendations to help you
+          design a solution that meets your requirements effectively and efficiently.</p>
+        <button class="btn btn-secondary" type="button" (click)="toggleHelp()">Back</button>
+      </div>
+    </div>
   </div>
-</main>
+</div>

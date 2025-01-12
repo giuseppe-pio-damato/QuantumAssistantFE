@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
-import { FindPatternsService } from '../service/find-patterns.service';
-import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { RequestInformationDTO } from '../service/model/requestInformationDTO';
-import {animate, state, style, transition, trigger} from '@angular/animations';
+import {Component} from '@angular/core';
+import {FindPatternsService} from '../service/find-patterns.service';
+import {FormsModule} from '@angular/forms';
+import {CommonModule} from '@angular/common';
+import {RequestInformationDTO} from '../service/model/requestInformationDTO';
+import {animate, style, transition, trigger} from '@angular/animations';
 import {NgxPaginationModule} from 'ngx-pagination';
 import NonFunctionalRequirementEnum = RequestInformationDTO.NonFunctionalRequirementEnum;
 import ArchitectureFamilyEnum = RequestInformationDTO.ArchitectureFamilyEnum;
@@ -26,24 +26,10 @@ interface FormData {
     NgxPaginationModule,
   ],
   animations: [
-    trigger('flip', [
-      state(
-        'form',
-        style({
-          transform: 'rotateY(0deg)',
-        })
-      ),
-      state(
-        'results',
-        style({
-          transform: 'rotateY(360deg)',
-        })
-      ),
-    ]),
     trigger('fadeIn', [
       transition(':enter', [
-        style({ opacity: 0, transform: 'translateY(20px)' }),
-        animate('0.5s ease-out', style({ opacity: 1, transform: 'translateY(0)' })),
+        style({opacity: 0, transform: 'translateY(20px)'}),
+        animate('0.5s ease-out', style({opacity: 1, transform: 'translateY(0)'})),
       ]),
     ]),
   ],
@@ -52,7 +38,8 @@ interface FormData {
 export class AppComponent {
   p: number = 1;
   showResults = false;
-  showBox = false;
+  showDescription = false;
+  showHelp = false;
   results: { [key: string]: string } = {};
   formData: FormData = {
     nonFunctionalRequirement: '',
@@ -72,7 +59,8 @@ export class AppComponent {
   }));
 
 
-  constructor(private findPatternsService: FindPatternsService) {}
+  constructor(private findPatternsService: FindPatternsService) {
+  }
 
   get objectKeys() {
     return Object.keys;
@@ -84,18 +72,16 @@ export class AppComponent {
 
   async findPatterns() {
     this.showResults = true;
-    this.showBox = true;
     try {
       this.results = await this.findPatternsService.findPattern(this.formData);
     } catch (error) {
       console.error('Error finding patterns:', error);
-      this.results = { 'Error': 'Failed to fetch patterns. Please try again later.' };
+      this.results = {'Error': 'Failed to fetch patterns. Please try again later.'};
     }
   }
 
   reset() {
     this.showResults = false;
-    this.showBox = false;
     this.formData = {
       nonFunctionalRequirement: '',
       architectureFamily: '',
@@ -104,4 +90,13 @@ export class AppComponent {
     };
     this.results = {};
   }
+
+  toggleHelp() {
+    this.showHelp = !this.showHelp;
+  }
+
+  moreDetails() {
+    this.showDescription = !this.showDescription;
+  }
+
 }
