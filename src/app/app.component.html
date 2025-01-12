@@ -1,7 +1,7 @@
 <div class="container-fluid">
   <div class="row landing-page">
     <!-- Title and Description Section -->
-    <div class="col-4">
+    <div class="col-12 col-md-4">
       <div *ngIf="!showDescription" class="logo-section" [@fadeIn]>
         <h1>Quantum Assistant</h1>
         <p>Your guide to design pattern selection.</p>
@@ -18,7 +18,7 @@
     </div>
 
     <!-- Form and Result Section -->
-    <div class="col-8">
+    <div class="col-12 col-md-8">
       <!-- Form Section -->
       <div *ngIf="!showHelp && !showResults" class="menu-section" [@fadeIn]="!showHelp ? 'form' : 'help'">
         <form (ngSubmit)="findPatterns()">
@@ -73,7 +73,7 @@
           </div>
         </form>
       </div>
-      <div class="row container-fluid">
+      <div class="row">
         <!-- Details Box -->
         <div *ngIf="showResults" class="col-9 menu-section-details" [@fadeIn]>
           <h2>Why?</h2>
