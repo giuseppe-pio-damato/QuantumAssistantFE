@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {FindPatternsService} from '../service/find-patterns.service';
 import {FormsModule} from '@angular/forms';
-import {CommonModule} from '@angular/common';
+import {CommonModule, NgOptimizedImage} from '@angular/common';
 import {RequestInformationDTO} from '../service/model/requestInformationDTO';
 import {animate, style, transition, trigger} from '@angular/animations';
 import {NgxPaginationModule} from 'ngx-pagination';
@@ -24,6 +24,7 @@ interface FormData {
     FormsModule,
     CommonModule,
     NgxPaginationModule,
+    NgOptimizedImage,
   ],
   animations: [
     trigger('fadeIn', [
@@ -37,6 +38,7 @@ interface FormData {
 })
 export class AppComponent {
   p: number = 1;
+  loading: boolean = false;
   showResults = false;
   showDescription = false;
   showHelp = false;
@@ -71,10 +73,14 @@ export class AppComponent {
   }
 
   async findPatterns() {
-    this.showResults = true;
+    this.loading = true;
     try {
       this.results = await this.findPatternsService.findPattern(this.formData);
+      this.loading = false;
+      this.showResults = true;
     } catch (error) {
+      this.loading = false;
+      this.showResults = true;
       console.error('Error finding patterns:', error);
       this.results = {'Error': 'Failed to fetch patterns. Please try again later.'};
     }
@@ -82,6 +88,7 @@ export class AppComponent {
 
   reset() {
     this.showResults = false;
+    this.loading = false;
     this.formData = {
       nonFunctionalRequirement: '',
       architectureFamily: '',

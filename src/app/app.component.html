@@ -1,24 +1,33 @@
+<nav *ngIf="showResults" class="navbar bg-nav" [@fadeIn]>
+  <div class="container-fluid d-flex align-items-center justify-content-start">
+    <img class="me-3" ngSrc="/assets/img/logo.png" alt="logo" width="50" height="50"/>
+    <h2 class="mb-0 text-white">Quantum Assistant</h2>
+  </div>
+</nav>
+
 <div class="container-fluid">
   <div class="row landing-page">
     <!-- Title and Description Section -->
-    <div class="col-12 col-md-4">
+    <div *ngIf="!showResults && !loading" class="col-12 col-md-4">
       <div *ngIf="!showDescription" class="logo-section" [@fadeIn]>
         <h1>Quantum Assistant</h1>
         <p>Your guide to design pattern selection.</p>
       </div>
       <div *ngIf="showDescription" class="menu-section" [@fadeIn]>
-        <p>Quantum Assistant is your personal architectural pattern advisor. You can speed up your decision-making
+        <p>Quantum Assistant is your personal architectural pattern advisor. You can speed up your
+          decision-making
           process by analyzing specific needs,
-          such as non-functional requirements and their rate, and aligning them with well-defined architectural
+          such as non-functional requirements and their rate, and aligning them with well-defined
+          architectural
           families. This ensures that you adopt proven, efficient patterns,
-          reducing trial-and-error and accelerating development. Moreover, it gives you for each pattern suggested some
+          reducing trial-and-error and accelerating development. Moreover, it gives you for each pattern
+          suggested some
           useful details about the choise that can leverage your know-how.</p>
         <button class="btn btn-secondary" type="button" (click)="moreDetails()">Hide</button>
       </div>
     </div>
-
     <!-- Form and Result Section -->
-    <div class="col-12 col-md-8">
+    <div *ngIf="!loading" class="col-12 col-md-8">
       <!-- Form Section -->
       <div *ngIf="!showHelp && !showResults" class="menu-section" [@fadeIn]="!showHelp ? 'form' : 'help'">
         <form (ngSubmit)="findPatterns()">
@@ -37,7 +46,8 @@
           </div>
           <div class="form-group">
             <label for="arch">Architecture Family:</label>
-            <select id="arch" name="arch" class="form-select" [(ngModel)]="formData.architectureFamily" required>
+            <select id="arch" name="arch" class="form-select" [(ngModel)]="formData.architectureFamily"
+                    required>
               <option value="" disabled>Select an architecture family</option>
               <option *ngFor="let arch of architectureFamilies" [value]="arch.value">
                 {{ arch.label }}
@@ -73,44 +83,54 @@
           </div>
         </form>
       </div>
-      <div class="row">
-        <!-- Details Box -->
-        <div *ngIf="showResults" class="col-9 menu-section-details" [@fadeIn]>
-          <h2>Why?</h2>
-          <ul>
-            <li class="chat-messages"
-                *ngFor="let key of objectKeys(results) | paginate: { itemsPerPage: getSize, currentPage: p }">
-              <div>
-                <h1>{{ key }}:</h1>
-                <p>{{ results[key] }}</p>
-              </div>
-            </li>
-          </ul>
-          <pagination-controls (pageChange)="p = $event"></pagination-controls>
-          <button (click)="reset()">Back</button>
-        </div>
-        <!-- Results Section -->
-        <div *ngIf="showResults" class="col-3 menu-section" [@fadeIn]="showResults ? 'results' : 'form'">
-          <h2>Results</h2>
-          <div>
-            <ul>
-              <li class="chat-messages" *ngFor="let key of objectKeys(results)">{{ key }}</li>
-            </ul>
-          </div>
-          <button (click)="reset()">Back</button>
-        </div>
-      </div>
       <!-- Help Section -->
       <div *ngIf="showHelp" class="menu-section" [@fadeIn]="showHelp ? 'help' : 'form'">
         <h2>Help</h2>
-        <p>In the <b>Non-Functional Requirement</b> dropdown list, you can select the primary goal that your system
-          needs to achieve. Then, you can choose the <b>Rate</b> of importance or priority for this requirement and
-          select the appropriate <b>Architecture Family</b> that best aligns with your system's objectives. After
-          specifying these details, you can chose how many <b>Results</b> you want and finally the system will provide
+        <p>In the <b>Non-Functional Requirement</b> dropdown list, you can select the primary goal that your
+          system
+          needs to achieve. Then, you can choose the <b>Rate</b> of importance or priority for this
+          requirement and
+          select the appropriate <b>Architecture Family</b> that best aligns with your system's objectives.
+          After
+          specifying these details, you can chose how many <b>Results</b> you want and finally the system will
+          provide
           tailored architectural pattern recommendations to help you
           design a solution that meets your requirements effectively and efficiently.</p>
         <button class="btn btn-secondary" type="button" (click)="toggleHelp()">Back</button>
       </div>
+    </div>
+    <div *ngIf="showResults && !loading" class="col-12 col-md-8">
+      <!-- Details Box -->
+      <div class="menu-section-details" [@fadeIn]>
+        <h2>Why?</h2>
+        <ul>
+          <li class="chat-messages"
+              *ngFor="let key of objectKeys(results) | paginate: { itemsPerPage: getSize, currentPage: p }">
+            <div>
+              <h1>{{ key }}:</h1>
+              <p>{{ results[key] }}</p>
+            </div>
+          </li>
+        </ul>
+        <pagination-controls (pageChange)="p = $event"></pagination-controls>
+        <button (click)="reset()">Back</button>
+      </div>
+    </div>
+    <div *ngIf="showResults && !loading" class="col-12 col-md-4">
+      <!-- Results Section -->
+      <div class="menu-section" [@fadeIn]="showResults ? 'results' : 'form'">
+        <h2>Results</h2>
+        <div>
+          <ul>
+            <li class="chat-messages" *ngFor="let key of objectKeys(results)">{{ key }}</li>
+          </ul>
+        </div>
+        <button (click)="reset()">Back</button>
+      </div>
+    </div>
+    <div *ngIf="loading && !showResults" class="container-fluid d-flex flex-column align-items-center justify-content-center" [@fadeIn]>
+      <img ngSrc="assets/img/loading.gif" alt="loading" height="200" width="200"/>
+      <h2 class="loading-h2 mb-0">Finding Patterns...</h2>
     </div>
   </div>
 </div>

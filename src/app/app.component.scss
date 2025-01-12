@@ -4,7 +4,7 @@
   justify-content: space-between;
   align-items: center;
   height: 100vh;
-  padding: 0 5%;
+  padding: 0 0.5%;
 }
 
 .logo-section {
@@ -25,7 +25,7 @@
   border-right: 2px solid #2b2d42;
   white-space: nowrap;
   width: fit-content;
-  animation: typing 3s steps(30, end), blink 0.75s step-end infinite;
+  animation: typing 2s steps(120, end), blink 0.75s step-end infinite;
 }
 
 @keyframes typing {
@@ -33,7 +33,7 @@
     width: 0;
   }
   to {
-    width: 50%;
+    width: 75%;
   }
 }
 
@@ -47,7 +47,6 @@
 }
 
 .menu-section {
-  flex: 1;
   background-color: #ffffff;
   padding: 2rem;
   margin-bottom: 20px;
@@ -62,12 +61,10 @@
 }
 
 .menu-section-details {
-  flex: 1;
   background-color: #ffffff;
   padding: 2rem;
   border-radius: 12px;
-  margin-right: 20px;
-  margin-left: 20px;
+  margin-right: 0;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s, box-shadow 0.3s;
 }
@@ -192,4 +189,33 @@ button:active {
   justify-content: center;
   align-items: center;
   gap: 1rem;
+}
+
+.bg-nav {
+  background-color: #2b2d42;
+}
+
+.loading-h2 {
+  color: #8d99ae;
+  margin-top: 0.5rem;
+  overflow: hidden;
+  border-right: 2px solid #2b2d42;
+  white-space: nowrap;
+  animation: typing-and-erasing 3.5s steps(30, end) infinite, blink 0.75s step-end infinite;
+}
+
+@keyframes typing-and-erasing {
+  0% {
+    width: 0;
+  }
+  50% {
+    width: 20%;
+  }
+  100% {
+    width: 0;
+  }
+}
+
+logo-id-h2 {
+  color: white;
 }
